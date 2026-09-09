@@ -7,10 +7,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import androidx.annotation.NonNull;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
 import com.example.issacsmedtracker.data.converter.TimeConverters;
 import com.example.issacsmedtracker.data.dao.ScheduleDao;
 import com.example.issacsmedtracker.data.entity.ScheduleEntity;
-
 @Database(
         entities = {ScheduleEntity.class},
         version = 1,
@@ -31,11 +33,34 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "med_tracker_database"
-                    ).build();
+                    ).addCallback(createCallback).build();
                 }
             }
         }
 
         return INSTANCE;
     }
+
+    private static final RoomDatabase.Callback createCallback =
+            new RoomDatabase.Callback() {
+                @Override
+                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                    super.onCreate(db);
+
+                    db.execSQL(
+                            "INSERT INTO schedules (id, label, time, enabled) " +
+                                    "VALUES (1, 'AllergyX pill', 600, 1)"
+                    );
+
+                    db.execSQL(
+                            "INSERT INTO schedules (id, label, time, enabled) " +
+                                    "VALUES (2, 'Morning spray', 600, 1)"
+                    );
+
+                    db.execSQL(
+                            "INSERT INTO schedules (id, label, time, enabled) " +
+                                    "VALUES (3, 'Evening spray', 1320, 1)"
+                    );
+                }
+            };
 }

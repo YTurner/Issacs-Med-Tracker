@@ -16,6 +16,9 @@ public interface ScheduleDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(ScheduleEntity schedule);
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertAll(ScheduleEntity... schedules);
+
     @Update
     void update(ScheduleEntity schedule);
 
